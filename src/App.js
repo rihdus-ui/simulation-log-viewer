@@ -60,24 +60,26 @@ class App extends Component {
 
                 <div className="container">
 
-                    <div className="text-left">
-                        <form className="">
+                    <div className="text-left clearfix" style={{marginTop: "40px", marginBottom: '20px'}}>
+                        <span className="pull-left" style={{marginRight: '20px'}}>Filter by:</span>
+                        <form className="pull-left">
                             <div className="form-group pull-left"
                                  style={{'marginRight': '20px'}}>
                                 <label>Scenario</label>
                                 <input className="form-control"
                                        onChange={this.onFilterChange}
                                        ref={(input) => { this.sceInput = input; }}
-                                       type="text" placeholder="Scenario"/>
+                                       type="text" placeholder="Scenario Id"/>
                             </div>
                             <div className="form-group pull-left">
                                 <label>Car build</label>
                                 <input className="form-control"
                                        onChange={this.onFilterChange}
                                        ref={(input) => { this.buildInput = input; }}
-                                       type="text" placeholder=""/>
+                                       type="text" placeholder="Build number"/>
                             </div>
                         </form>
+
                     </div>
                     <SimLogView data={this.data} filter={this.filter}/>
                 </div>
