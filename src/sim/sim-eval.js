@@ -37,9 +37,24 @@ function SimEvaluator(sceConfig) {
         evalForCollision: new SyncSpec(sim =>
             _evalForCollision(sim.result.hasCollision))
     };
+
+    /**
+     * Success rule validator.
+     */
     specStore.successEvaluator =
+        /**
+         * Should not exceed max run time
+         */
         specStore.evalAgainstMaxRunningTime
+
+        /**
+         * And, should not exceed max allow stops
+         */
             .and(specStore.evalAgainstMaxStops)
+
+            /**
+             * And should not have any collisions
+             */
             .and(specStore.evalForCollision.not())
     ;
 

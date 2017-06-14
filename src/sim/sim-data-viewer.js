@@ -45,6 +45,12 @@ class SimLogView extends Component {
         this.sortKey = {
             startTime: {
                 dir: SORT_STATE.NONE,
+
+                /**
+                 * Custom sorter function returns a value that can be used to compare the simulation object.
+                 * @param sim Object Simulation object.
+                 * @return {*}
+                 */
                 sorter: function (sim) {
                     return new Date(sim.startTime).getTime();
                 }

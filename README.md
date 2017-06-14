@@ -1,6 +1,24 @@
 # Simulation Log Viewer
 Runs simulations of different car builds in different scenarios
 
+Start development server.
+```bash
+npm start
+```
+
+Start test runner in watch mode.
+```bash
+npm run test
+```
+Follow onscreen for usage.
+Press `a` to run all tests.
+
+- `App.js` Main react app.
+- `sim-eval.js` Simulation evaluator rule engine.
+- `sim-data-viewer.js` Simulation data viewer.
+- `sim-stats.js` Simulation log statistics view.
+- `sim-data.js` Simulation data provider. (Hardcoded JSON).
+
 Currently the data is loaded from a static asset in the project `sim-data.js` 
 
 ref: http://www.json-generator.com/
