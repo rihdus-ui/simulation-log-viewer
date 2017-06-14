@@ -20,7 +20,6 @@ export default class SimStatsView extends Component {
 
     render() {
         this.simStats = this._prepViewData(this.props.simData, this.props.sceDict);
-        console.log('update stats...', this.simStats);
         return (
             <div>
                 <div className="row">
