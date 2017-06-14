@@ -45,18 +45,14 @@ class SimLogView extends Component {
         this.sortKey = {
             startTime: {
                 dir: SORT_STATE.NONE,
-                sorter: function (m_date) {
-                    if (this.state.startTime.dir !== null) {
-                        return this.state.startTime.dir ? m_date.milliseconds() : -1 * m_date.milliseconds();
-                    }
+                sorter: function (sim) {
+                    return new Date(sim.startTime).getTime();
                 }
             },
             endTime: {
                 dir: SORT_STATE.NONE,
-                sorter: function (m_date) {
-                    if (this.state.endTime.dir !== null) {
-                        return this.state.endTime.dir ? m_date.milliseconds() : -1 * m_date.milliseconds();
-                    }
+                sorter: function (sim) {
+                    return new Date(sim.endTime).getTime();
                 }
             },
             scenarioId: {
@@ -67,8 +63,8 @@ class SimLogView extends Component {
             },
             runTime: {
                 dir: SORT_STATE.NONE,
-                sorter: function (runTime) {
-                    return this.state.endTime.dir ? runTime.asMilliseconds() : -1 * runTime.asMilliseconds();
+                sorter: function (sim) {
+                    return new Date(sim.endTime).getTime() - new Date(sim.startTime).getTime();
                 }
             },
             numStops: {
@@ -93,7 +89,7 @@ class SimLogView extends Component {
     componentWillUpdate() {
         // console.log('updating ..', this.simData);
         this.simData = this._prepSimData(this.props.data.simulationRuns);
-        if(this.state.sortKey) {
+        if (this.state.sortKey) {
             this.simData = this._sortSimData(
                 this.simData,
                 this.state.sortKey,
@@ -107,7 +103,7 @@ class SimLogView extends Component {
         return (
 
             <div>
-                <SimStatsView simData={this.simData} sceDict={this.sceDataDict} />
+                <SimStatsView simData={this.simData} sceDict={this.sceDataDict}/>
                 <hr/>
                 <table className="table table-responsive">
                     <thead>
@@ -200,6 +196,14 @@ class SimLogView extends Component {
         });
     }
 
+    /**
+     * Format scenarios array as to dictionary.
+     * @param scenarios
+     * @return {{}} Object Dictionary of scenarios
+     *  - key: scenarioId
+     *  - value: scenario object
+     * @private
+     */
     _prepData(scenarios) {
         let dict = {};
         scenarios.forEach(sce => {
@@ -209,15 +213,27 @@ class SimLogView extends Component {
         return dict;
     }
 
-    _sortSimData(simData, key, asc) {
 
-        // console.log('sorting', _.map(simData, 'scenarioId'), `Key:${key}`, `asc:${asc}`);
+    /**
+     * Sort simulation data by provided key and sort direction.
+     * @param simData
+     * @param key
+     * @param asc sort direction ascending
+     * @return {*}
+     * @private
+     */
+    _sortSimData(simData, key, asc) {
+        let _this = this;
         if (key === null) {
             return simData
         }
         else {
             let newSort = _.sortBy(simData, function (sim) {
-                return sim[key]
+                let sortKey = _this.sortKey[key];
+                if (sortKey.sorter) {
+                    return sortKey.sorter(sim);
+                } else
+                    return sim[key];
             });
             return asc ? newSort : _.reverse(newSort);
         }

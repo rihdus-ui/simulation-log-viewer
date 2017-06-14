@@ -48,6 +48,17 @@ export default class SimStatsView extends Component {
         )
     }
 
+    /**
+     * Evaluate statistics for the simulation run
+     * @param simData Array List of simulation records
+     * @param sceDict Object Dictionary of scenario records.
+     * @return Object
+     *  - p_countExceededMaxStops Percentage of sims which exceed max stops value
+     *  - p_countExceededRunningTime Percentage of sims which exceed max runtime
+     *  - p_countCollisions Percentage of sims which have collisions
+     *  - p_total Total percentage of sims which fail any of the previous conditions
+     * @private
+     */
     _prepViewData(simData, sceDict) {
         const _this = this;
         let stats = _.reduce(simData,
