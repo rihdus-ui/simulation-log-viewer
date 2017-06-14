@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import SimStatsView from './sim-stats';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -90,7 +91,7 @@ class SimLogView extends Component {
     }
 
     componentWillUpdate() {
-        console.log('updating ..', this.simData);
+        // console.log('updating ..', this.simData);
         this.simData = this._prepSimData(this.props.data.simulationRuns);
         if(this.state.sortKey) {
             this.simData = this._sortSimData(
@@ -102,64 +103,71 @@ class SimLogView extends Component {
 
     render() {
         this.sceDataDict = this._prepData(this.props.data.scenarios);
+
         return (
-            <table className="table table-responsive">
-                <thead>
-                <tr>
-                    <th onClick={() => this.onSortKeyClick('scenarioId')}>
-                        <span>Scenario Id</span>
-                        <span>{this.state.sortKey === 'scenarioId' ? this.sortKey.scenarioId.dir ? '↑' : '↓' : ''}</span>
-                    </th>
-                    <th onClick={() => this.onSortKeyClick('carBuild')}>
-                        <span>Car Build</span>
-                        <span>{this.state.sortKey === 'carBuild' ? this.sortKey.carBuild.dir ? '↑' : '↓' : ''}</span>
-                    </th>
-                    <th onClick={() => this.onSortKeyClick('startTime')}>
-                        <span>Start Time</span>
-                        <span>{this.state.sortKey === 'startTime' ? this.sortKey.startTime.dir ? '↑' : '↓' : ''}</span>
-                    </th>
-                    <th onClick={() => this.onSortKeyClick('runTime')}>
-                        <span>Running Time / Max Running Time</span>
-                        <span>{this.state.sortKey === 'runTime' ? this.sortKey.runTime.dir ? '↑' : '↓' : ''}</span>
-                    </th>
-                    <th onClick={() => this.onSortKeyClick('numStops')}>
-                        <span>Number of Stops / Max Stops</span>
-                        <span>{this.state.sortKey === 'numStops' ? this.sortKey.numStops.dir ? '↑' : '↓' : ''}</span>
-                    </th>
-                    <th onClick={() => this.onSortKeyClick('collision')}>
-                        <span>Collision</span>
-                        <span>{this.state.sortKey === 'collision' ? this.sortKey.collision.dir ? '↑' : '↓' : ''}</span>
-                    </th>
-                    <th onClick={() => this.onSortKeyClick('result')}>
-                        <span>Result</span>
-                        <span>{this.state.sortKey === 'result' ? this.sortKey.result.dir ? '↑' : '↓' : ''}</span>
-                    </th>
-                </tr>
-                </thead>
-                <tbody className="text-left">
-                {this.simData.map((sim, index) => {
-                    return (
-                        <tr key={'sim' + index}>
-                            <td>{sim.scenarioId}</td>
-                            <td>{sim.carBuild}</td>
-                            <td>{sim.m_endTime.format('MM/DD/YY, hh:mm')}</td>
-                            <td>
-                                <span>{Math.round(sim._runTime.asMinutes())}s</span>
-                                <span>/</span>
-                                <span>{Math.round(this.utils.moment.duration(this.sceDataDict[sim.scenarioId].maxRunningTime).asMinutes())}s</span>
-                            </td>
-                            <td>
-                                <span>{sim.result.numberOfStops}</span>
-                                <span>/</span>
-                                <span>{this.sceDataDict[sim.scenarioId].maxNumberOfStops}</span>
-                            </td>
-                            <td>{sim.result.hasCollision ? 'yes ✔' : 'no ✘'}</td>
-                            <td>{this.sceDataDict[sim.scenarioId].sceneEvaluator.eval(sim) ? 'Pass ✔' : 'Fail ✘'}</td>
-                        </tr>
-                    )
-                })}
-                </tbody>
-            </table>
+
+            <div>
+                <SimStatsView simData={this.simData} sceDict={this.sceDataDict} />
+                <hr/>
+                <table className="table table-responsive">
+                    <thead>
+                    <tr>
+                        <th onClick={() => this.onSortKeyClick('scenarioId')}>
+                            <span>Scenario Id</span>
+                            <span>{this.state.sortKey === 'scenarioId' ? this.sortKey.scenarioId.dir ? '↑' : '↓' : ''}</span>
+                        </th>
+                        <th onClick={() => this.onSortKeyClick('carBuild')}>
+                            <span>Car Build</span>
+                            <span>{this.state.sortKey === 'carBuild' ? this.sortKey.carBuild.dir ? '↑' : '↓' : ''}</span>
+                        </th>
+                        <th onClick={() => this.onSortKeyClick('startTime')}>
+                            <span>Start Time</span>
+                            <span>{this.state.sortKey === 'startTime' ? this.sortKey.startTime.dir ? '↑' : '↓' : ''}</span>
+                        </th>
+                        <th onClick={() => this.onSortKeyClick('runTime')}>
+                            <span>Running Time / Max Running Time</span>
+                            <span>{this.state.sortKey === 'runTime' ? this.sortKey.runTime.dir ? '↑' : '↓' : ''}</span>
+                        </th>
+                        <th onClick={() => this.onSortKeyClick('numStops')}>
+                            <span>Number of Stops / Max Stops</span>
+                            <span>{this.state.sortKey === 'numStops' ? this.sortKey.numStops.dir ? '↑' : '↓' : ''}</span>
+                        </th>
+                        <th onClick={() => this.onSortKeyClick('collision')}>
+                            <span>Collision</span>
+                            <span>{this.state.sortKey === 'collision' ? this.sortKey.collision.dir ? '↑' : '↓' : ''}</span>
+                        </th>
+                        <th onClick={() => this.onSortKeyClick('result')}>
+                            <span>Result</span>
+                            <span>{this.state.sortKey === 'result' ? this.sortKey.result.dir ? '↑' : '↓' : ''}</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody className="text-left">
+                    {this.simData.map((sim, index) => {
+                        return (
+                            <tr key={'sim' + index}>
+                                <td>{sim.scenarioId}</td>
+                                <td>{sim.carBuild}</td>
+                                <td>{sim.m_endTime.format('MM/DD/YY, hh:mm')}</td>
+                                <td>
+                                    <span>{Math.round(sim._runTime.asMinutes())}mins</span>
+                                    <span>/</span>
+                                    <span>{Math.round(this.utils.moment.duration(this.sceDataDict[sim.scenarioId].maxRunningTime).asMinutes())}mins</span>
+                                </td>
+                                <td>
+                                    <span>{sim.result.numberOfStops}</span>
+                                    <span>/</span>
+                                    <span>{this.sceDataDict[sim.scenarioId].maxNumberOfStops}</span>
+                                </td>
+                                <td>{sim.result.hasCollision ? 'yes ✔' : 'no ✘'}</td>
+                                <td>{this.sceDataDict[sim.scenarioId].sceneEvaluator.eval(sim) ? 'Pass ✔' : 'Fail ✘'}</td>
+                            </tr>
+                        )
+                    })}
+                    </tbody>
+                </table>
+
+            </div>
         );
     }
 
@@ -203,7 +211,7 @@ class SimLogView extends Component {
 
     _sortSimData(simData, key, asc) {
 
-        console.log('sorting', _.map(simData, 'scenarioId'), `Key:${key}`, `asc:${asc}`);
+        // console.log('sorting', _.map(simData, 'scenarioId'), `Key:${key}`, `asc:${asc}`);
         if (key === null) {
             return simData
         }

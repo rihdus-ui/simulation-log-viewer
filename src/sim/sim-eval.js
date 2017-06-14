@@ -26,9 +26,13 @@ function SimEvaluator(sceConfig) {
             sim.result.numberOfStops,
             sceConfig.maxNumberOfStops)),
 
-        evalAgainstMaxRunningTime: new SyncSpec(sim =>
-            _evalAgainstMaxRunningTime(
-                sim.endTime - sim.startTime, sceConfig.maxRunningTime)),
+        evalAgainstMaxRunningTime: new SyncSpec(sim => {
+            let _startTime = new Date(sim.startTime).getTime(),
+                _endTime = new Date(sim.endTime).getTime();
+
+            return _evalAgainstMaxRunningTime(
+                _endTime - _startTime, sceConfig.maxRunningTime)
+        }),
 
         evalForCollision: new SyncSpec(sim =>
             _evalForCollision(sim.result.hasCollision))
@@ -45,7 +49,7 @@ function SimEvaluator(sceConfig) {
 }
 
 function _evalAgainstMaxStops(stops, maxStops) {
-    return stops < maxStops;
+    return stops <= maxStops;
 }
 
 function _evalAgainstMaxRunningTime(runningTime, maxRunningTime) {

@@ -1,6 +1,59 @@
 # Simulation Log Viewer
 Runs simulations of different car builds in different scenarios
 
+Currently the data is loaded from a static asset in the project `sim-data.js` 
+
+ref: http://www.json-generator.com/
+
+Generator schema 
+```js
+[
+  {
+    simulationRuns: [
+      '{{repeat(50)}}',
+      {
+        startTime: function() {
+          return new Date().toISOString();
+        },
+        _runTime: '{{integer(20, 400)}}',
+        endTime: function(startTime) {
+          var _startTime = new Date(this.startTime);
+          return new Date(_startTime.getTime() + this._runTime*60).toISOString();
+        },
+      scenarioId: '{{random("sce-1", "sce-2", "sce-181-lo", "sce-13")}}',
+      carBuild: '{{random("car-blue", "car-green", "car-47")}}',
+      result: {
+        numberOfStops: '{{integer(0, 40)}}',
+        hasCollision: '{{bool()}}'
+      }
+    }
+    ],
+    scenarios: [
+      {
+        scenarioId: "sce-1",
+        maxNumberOfStops: '{{integer(1, 5)}}',
+        maxRunningTime: '{{integer(10*60*60*1000, 999*10*60*60*1000)}}'
+      },
+      {
+        scenarioId: "sce-2",
+        maxNumberOfStops: '{{integer(5, 10)}}',
+        maxRunningTime: '{{integer(10*60*60*1000, 10*10*60*60*1000)}}'
+      },
+      {
+        scenarioId: "sce-181-lo",
+        maxNumberOfStops: '{{integer(40, 100)}}',
+        maxRunningTime: '{{integer(100*60*60*1000, 16*10*60*60*1000)}}'
+      },
+      {
+        scenarioId: "sce-13",
+        maxNumberOfStops: '{{integer(100, 300)}}',
+        maxRunningTime: '{{integer(7*60*60*1000, 10*10*60*60*1000)}}'
+      }
+    ]
+  }
+]
+```
+
 ----------------------------------------------------
 
 

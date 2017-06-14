@@ -1,5 +1,4 @@
 .App {
-  text-align: center;
 }
 
 .App-logo {
@@ -11,6 +10,7 @@
   background-color: #222;
   padding: 20px;
   color: white;
+  text-align: center;
 }
 
 .App-intro {

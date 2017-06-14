@@ -27,10 +27,6 @@ class App extends Component {
 
     onFilterChange(e) {
         const _this = this;
-        this.setState({
-            filter_scenario: this.sceInput.value,
-            filter_carBuild: this.buildInput.value
-        });
 
         this.data.simulationRuns = _.filter(data.simulationRuns, function (sim) {
             return (
@@ -40,6 +36,11 @@ class App extends Component {
                     _this.buildInput.value ? sim.carBuild.indexOf(_this.buildInput.value) !== -1 : true
                 )
             )
+        });
+
+        this.setState({
+            filter_scenario: this.sceInput.value,
+            filter_carBuild: this.buildInput.value
         });
     }
 
@@ -54,7 +55,7 @@ class App extends Component {
                     <div className="container">
                         <img src={logo} className="App-logo" alt="logo"/>
                         <h2>Simulation Log Viewer</h2>
-                        <p>ReactJs, create-react-app, MomentJs, Lodash</p>
+                        <p>ReactJs, create-react-app, MomentJs, Lodash, Bootstrap@3</p>
                     </div>
                 </div>
 
