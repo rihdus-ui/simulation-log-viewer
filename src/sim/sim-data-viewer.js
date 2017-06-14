@@ -111,6 +111,7 @@ class SimLogView extends Component {
             <div>
                 <SimStatsView simData={this.simData} sceDict={this.sceDataDict}/>
                 <hr/>
+                <div className="alert alert-info">Click on the column label to sort the table.</div>
                 <table className="table table-responsive">
                     <thead>
                     <tr>
